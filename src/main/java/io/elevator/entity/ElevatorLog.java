@@ -1,4 +1,4 @@
-package io.elevator.challenge.entity;
+package io.elevator.entity;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -9,9 +9,9 @@ import lombok.ToString;
 import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "executed_query_log")
+@Table(name = "elevator_log")
 @Data @NoArgsConstructor @AllArgsConstructor @ToString
-public class ExecutedQueryLog {
+public class ElevatorLog {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -19,14 +19,15 @@ public class ExecutedQueryLog {
     @Column(name = "timestamp", nullable = false)
     private LocalDateTime timestamp;
 
-    @Column(name = "user", nullable = false)
-    private String user;
+    @Column(name = "elevator_id", nullable = false)
+    private int elevatorId;
 
-    @Column(name = "location", nullable = false)
-    private String location;
+    @Column(name = "floor", nullable = false)
+    private int floor;
 
-    @Column(name = "query", nullable = false)
-    private String query;
+    @Column(name = "direction", nullable = false)
+    private String direction;
 
-    // Constructors, getters, and setters
+    @Column(name = "event", nullable = false)
+    private String event;
 }
