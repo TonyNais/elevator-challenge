@@ -4,7 +4,7 @@ import io.elevator.dto.ElevatorStatusDTO;
 import io.elevator.entity.ElevatorLog;
 import io.elevator.repository.ElevatorLogRepository;
 import io.elevator.service.ElevatorService;
-import io.elevator.util.ElevatorDirection;
+import io.elevator.util.ElevatorDirectionEnum;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -54,7 +54,7 @@ class ElevatorServiceTest {
 
 		// Assert
 		Assertions.assertEquals(sourceFloor, elevatorStatus.getCurrentFloor());
-		Assertions.assertEquals(ElevatorDirection.UP, elevatorStatus.getDirection());
+		Assertions.assertEquals(ElevatorDirectionEnum.MOVING_UP, elevatorStatus.getDirection());
 	}
 
 	@Test
@@ -70,7 +70,7 @@ class ElevatorServiceTest {
 
 		// Assert
 		Assertions.assertEquals(sourceFloor, elevatorStatus.getCurrentFloor());
-		Assertions.assertEquals(ElevatorDirection.STATIONARY, elevatorStatus.getDirection());
+		Assertions.assertEquals(ElevatorDirectionEnum.STATIONARY, elevatorStatus.getDirection());
 	}
 
 	@Test
@@ -86,6 +86,6 @@ class ElevatorServiceTest {
 
 		// Assert
 		Assertions.assertEquals(sourceFloor, elevatorStatus.getCurrentFloor());
-		Assertions.assertEquals(ElevatorDirection.DOWN, elevatorStatus.getDirection());
+		Assertions.assertEquals(ElevatorDirectionEnum.MOVING_DOWN, elevatorStatus.getDirection());
 	}
 }

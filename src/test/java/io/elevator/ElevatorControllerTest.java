@@ -3,7 +3,8 @@ package io.elevator;
 import io.elevator.controller.ElevatorController;
 import io.elevator.dto.ElevatorStatusDTO;
 import io.elevator.service.ElevatorService;
-import io.elevator.util.ElevatorDirection;
+import io.elevator.util.DoorStatusEnum;
+import io.elevator.util.ElevatorDirectionEnum;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -56,7 +57,8 @@ class ElevatorControllerTest {
         int elevatorId = 1;
         ElevatorStatusDTO elevatorStatus = new ElevatorStatusDTO(elevatorId);
         elevatorStatus.setCurrentFloor(3);
-        elevatorStatus.setDirection(ElevatorDirection.UP);
+        elevatorStatus.setDoorStatus(DoorStatusEnum.CLOSED);
+        elevatorStatus.setDirection(ElevatorDirectionEnum.MOVING_UP);
 
         when(elevatorService.getElevatorStatus(anyInt())).thenReturn(elevatorStatus);
 
@@ -67,6 +69,6 @@ class ElevatorControllerTest {
 
         // Assert
         String responseJson = result.getResponse().getContentAsString();
-        Assertions.assertEquals("{\"elevatorId\":1,\"currentFloor\":3,\"direction\":\"UP\",\"lastEvent\":null}", responseJson);
+        Assertions.assertEquals("{\"elevatorId\":1,\"currentFloor\":3,\"direction\":\"MOVING_UP\",\"doorStatus\":\"CLOSED\",\"lastEvent\":null}", responseJson);
     }
 }

@@ -1,5 +1,7 @@
 package io.elevator.entity;
 
+import io.elevator.util.DoorStatusEnum;
+import io.elevator.util.ElevatorDirectionEnum;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -26,7 +28,10 @@ public class ElevatorLog {
     private int floor;
 
     @Column(name = "direction", nullable = false)
-    private String direction;
+    private ElevatorDirectionEnum direction;
+
+    @Column(name = "door", nullable = false)
+    private DoorStatusEnum doorStatus = DoorStatusEnum.CLOSED;
 
     @Column(name = "event", nullable = false)
     private String event;

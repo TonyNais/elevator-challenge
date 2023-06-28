@@ -5,7 +5,8 @@ import io.elevator.entity.ElevatorLog;
 import io.elevator.entity.ExecutedQueryLog;
 import io.elevator.repository.ElevatorLogRepository;
 import io.elevator.repository.ExecutedQueryLogRepository;
-import io.elevator.util.ElevatorDirection;
+import io.elevator.util.DoorStatusEnum;
+import io.elevator.util.ElevatorDirectionEnum;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -38,7 +39,13 @@ public class ElevatorService {
         elevatorLog.setTimestamp(LocalDateTime.now());
         elevatorLog.setElevatorId(elevatorId);
         elevatorLog.setFloor(sourceFloor);
-        elevatorLog.setDirection("Moving");
+        if(sourceFloor == destinationFloor){
+            elevatorLog.setDirection(ElevatorDirectionEnum.STATIONARY);
+        }else if(sourceFloor>destinationFloor){
+            elevatorLog.setDirection(ElevatorDirectionEnum.MOVING_UP);
+        }else {
+            elevatorLog.setDirection(ElevatorDirectionEnum.MOVING_DOWN);
+        }
         elevatorLog.setEvent("Called from floor " + sourceFloor);
         logElevatorEvent(elevatorLog);
 
@@ -51,18 +58,28 @@ public class ElevatorService {
             try {
                 int currentFloor = sourceFloor;
                 while (currentFloor != destinationFloor) {
-                    Thread.sleep(5000); // Delay for 5 seconds to simulate moving between floors
+                    // Delay for 5 seconds to simulate moving between floors
+                    Thread.sleep(5000);
                     log.info("Elevator {} now at floor {}", elevatorId, currentFloor);
 
-                    currentFloor += (currentFloor < destinationFloor) ? 1 : -1; // Adjust current floor based on direction
+                    // Adjust current floor based on direction
+                    currentFloor += (currentFloor < destinationFloor) ? 1 : -1;
 
                     elevatorStatus.setCurrentFloor(currentFloor);
                     logElevatorEvent(elevatorLog);
 
                     if (currentFloor == destinationFloor) {
                         log.info("Elevator {} has arrived at floor {}", elevatorId, destinationFloor);
-                        elevatorStatus.setDirection(ElevatorDirection.STATIONARY);
+                        elevatorStatus.setDirection(ElevatorDirectionEnum.STATIONARY);
+                        elevatorStatus.setDoorStatus(DoorStatusEnum.OPEN);
                         elevatorStatus.setLastEvent("Arrived at floor " + destinationFloor);
+                        logElevatorEvent(elevatorLog);
+
+                        //Door open for two seconds
+                        Thread.sleep(2000);
+
+                        //Door closed after two seconds
+                        elevatorStatus.setDoorStatus(DoorStatusEnum.CLOSED);
                         logElevatorEvent(elevatorLog);
                     }
                 }
@@ -88,13 +105,13 @@ public class ElevatorService {
         executedQueryLogRepository.save(executedQueryLog);
     }
 
-    private ElevatorDirection getDirection(int currentFloor, int destinationFloor) {
+    private ElevatorDirectionEnum getDirection(int currentFloor, int destinationFloor) {
         if (currentFloor < destinationFloor) {
-            return ElevatorDirection.UP;
+            return ElevatorDirectionEnum.MOVING_UP;
         } else if (currentFloor > destinationFloor) {
-            return ElevatorDirection.DOWN;
+            return ElevatorDirectionEnum.MOVING_DOWN;
         } else {
-            return ElevatorDirection.STATIONARY;
+            return ElevatorDirectionEnum.STATIONARY;
         }
     }
 
