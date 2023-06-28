@@ -6,10 +6,10 @@ import org.springframework.scheduling.annotation.EnableAsync;
 
 @SpringBootApplication
 @EnableAsync
-public class ChallengeApplication {
+public class ElevatorChallengeApplication {
 
 	public static void main(String[] args) {
-		SpringApplication.run(ChallengeApplication.class, args);
+		SpringApplication.run(ElevatorChallengeApplication.class, args);
 	}
 
 }

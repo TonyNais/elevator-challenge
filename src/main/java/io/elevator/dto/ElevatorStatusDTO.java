@@ -1,5 +1,6 @@
 package io.elevator.dto;
 
+import io.elevator.util.ElevatorDirection;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -7,7 +8,7 @@ import lombok.Setter;
 public class ElevatorStatusDTO {
     private int elevatorId;
     private int currentFloor;
-    private String direction;
+    private ElevatorDirection direction;
     private String lastEvent;
 
     public ElevatorStatusDTO(int elevatorId) {

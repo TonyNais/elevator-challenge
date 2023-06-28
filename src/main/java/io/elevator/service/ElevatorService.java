@@ -5,6 +5,7 @@ import io.elevator.entity.ElevatorLog;
 import io.elevator.entity.ExecutedQueryLog;
 import io.elevator.repository.ElevatorLogRepository;
 import io.elevator.repository.ExecutedQueryLogRepository;
+import io.elevator.util.ElevatorDirection;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -56,7 +57,7 @@ public class ElevatorService {
                     logElevatorEvent(elevatorLog);
 
                     if (currentFloor == destinationFloor) {
-                        elevatorStatus.setDirection("Stationary");
+                        elevatorStatus.setDirection(ElevatorDirection.STATIONARY);
                         elevatorStatus.setLastEvent("Arrived at floor " + destinationFloor);
                         logElevatorEvent(elevatorLog);
                     }
@@ -82,13 +83,17 @@ public class ElevatorService {
         executedQueryLogRepository.save(executedQueryLog);
     }
 
-    private String getDirection(int currentFloor, int destinationFloor) {
+    private ElevatorDirection getDirection(int currentFloor, int destinationFloor) {
         if (currentFloor < destinationFloor) {
-            return "Up";
+            return ElevatorDirection.UP;
         } else if (currentFloor > destinationFloor) {
-            return "Down";
+            return ElevatorDirection.DOWN;
         } else {
-            return "Stationary";
+            return ElevatorDirection.STATIONARY;
         }
+    }
+
+    public  Map<Integer, ElevatorStatusDTO> getAllElevatorsStatus() {
+        return elevatorStatusMap;
     }
 }

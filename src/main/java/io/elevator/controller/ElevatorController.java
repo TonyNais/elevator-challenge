@@ -5,6 +5,8 @@ import io.elevator.service.ElevatorService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Map;
+
 @RestController
 @RequestMapping("/elevator")
 public class ElevatorController {
@@ -25,5 +27,10 @@ public class ElevatorController {
     @GetMapping("/{elevatorId}/status")
     public ElevatorStatusDTO getElevatorStatus(@PathVariable("elevatorId") int elevatorId) {
         return elevatorService.getElevatorStatus(elevatorId);
+    }
+
+    @GetMapping("/status")
+    public Map<Integer, ElevatorStatusDTO> getAllElevatorsStatus() {
+        return elevatorService.getAllElevatorsStatus();
     }
 }
