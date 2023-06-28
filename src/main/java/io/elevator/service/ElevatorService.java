@@ -6,6 +6,7 @@ import io.elevator.entity.ExecutedQueryLog;
 import io.elevator.repository.ElevatorLogRepository;
 import io.elevator.repository.ExecutedQueryLogRepository;
 import io.elevator.util.ElevatorDirection;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -17,6 +18,7 @@ import java.util.Map;
 import java.util.concurrent.CompletableFuture;
 
 @Service
+@Slf4j
 public class ElevatorService {
     private final ElevatorLogRepository elevatorLogRepository;
     private final ExecutedQueryLogRepository executedQueryLogRepository;
@@ -50,6 +52,7 @@ public class ElevatorService {
                 int currentFloor = sourceFloor;
                 while (currentFloor != destinationFloor) {
                     Thread.sleep(5000); // Delay for 5 seconds to simulate moving between floors
+                    log.info("Elevator {} now at floor {}", elevatorId, currentFloor);
 
                     currentFloor += (currentFloor < destinationFloor) ? 1 : -1; // Adjust current floor based on direction
 
@@ -57,12 +60,14 @@ public class ElevatorService {
                     logElevatorEvent(elevatorLog);
 
                     if (currentFloor == destinationFloor) {
+                        log.info("Elevator {} has arrived at floor {}", elevatorId, destinationFloor);
                         elevatorStatus.setDirection(ElevatorDirection.STATIONARY);
                         elevatorStatus.setLastEvent("Arrived at floor " + destinationFloor);
                         logElevatorEvent(elevatorLog);
                     }
                 }
             } catch (InterruptedException e) {
+                log.error(e.getLocalizedMessage());
                 e.printStackTrace();
             }
         });
